@@ -1,19 +1,34 @@
 import React, {useEffect, useState} from 'react';
-import '../App.css';
+import '../../App.css';
 import Cell from "./boardCell/cell";
-import cell from './boardCell/cell';
+import { wordBuildFromArray } from '../../functions/wordBuildFromArray';
+import { wordCheckOnExisting } from "../../functions/apiRequests";
+
 
 export default function Playboard({
     firstWord,
-    gridSize
+    gridSize,
+    onCorrectWord
 }:{
     firstWord: string,
-    gridSize: number
+    gridSize: number,
+    onCorrectWord: (word: string) => void;
 }){
 
     const [wordsGrid, setWordsGrid] = useState<string[]>(
         Array.from({length:gridSize*gridSize}).map((el)=> "")
     )
+    wordsGrid[0] = "A"
+    wordsGrid[1] = "B"
+    wordsGrid[2] = "C"
+    wordsGrid[3] = "D"
+    wordsGrid[4] = "E"
+    wordsGrid[5] = "F"
+    wordsGrid[6] = "G"
+    wordsGrid[7] = "E"
+    wordsGrid[8] = "F"
+    wordsGrid[9] = "G"
+
     const [waitingInputCellFromUser, setWaitingInputCellFromUser] = useState<number | null>(null);
     const [lastInput, setLastInput] = useState<number | null>(null); // need this in case if user want to change entered letter or change cell
     const [isWordSelecting, setIsWordSelecting] = useState<boolean>(false);
@@ -24,13 +39,13 @@ export default function Playboard({
     const startIndex = (gridSize * gridSize - gridSize)/2;
     let wordsGridWithFirstWord = wordsGrid;
     for(let i = 0; i<firstWord.length; i++){
-        wordsGridWithFirstWord[i+startIndex] = firstWord[i]; // why this changed state?
+        wordsGridWithFirstWord[i+startIndex] = firstWord[i].toUpperCase(); // why this changed state?
     }
+   
     // setWordsGrid(wordsGridWithFirstWord); // max rerenders call
 
 
     const handleKeyDown = (event: React.KeyboardEvent<HTMLImageElement>) => {
-        console.log('sevent', event)
         if (waitingInputCellFromUser !== null && /^[a-zA-Z]$/.test(event.key)) {
             const updatedWordsGrid = [...wordsGrid];
             if(lastInput) updatedWordsGrid[lastInput] = "";
@@ -41,9 +56,7 @@ export default function Playboard({
         }
     };
 
-
     const onMouseDownHandler = (cellIndex: number) =>{
-        // console.log("cellindex",cellIndex, 'lastInput index:', lastInput);
         if(wordsGrid[cellIndex] == "" || cellIndex == lastInput){   
             setWaitingInputCellFromUser(cellIndex);
             setSelectedWordFromUser([]);
@@ -58,11 +71,51 @@ export default function Playboard({
     }
 
     const mouseOnCellEnter = (cellIndex: number)=>{
-        // console.log("mouseOnCellEnter", cellIndex, "isWordSelecting",isWordSelecting, "lastInput",lastInput);
-        if(isWordSelecting && wordsGrid[cellIndex] !== ""){
+
+        if(isWordSelecting && wordsGrid[cellIndex] !== "" && !selectedWordFromUser.includes(cellIndex)){
             setSelectedWordFromUser([...selectedWordFromUser,cellIndex])
         }
+        if(wordsGrid[cellIndex] == "" || selectedWordFromUser.includes(cellIndex)){
+            // setIsWordSelecting(false);
+        }
+
+        if(selectedWordFromUser[selectedWordFromUser.length -1] == cellIndex){
+            console.log('Deleted last element')
+            setSelectedWordFromUser(selectedWordFromUser.splice(-1))
+        }
+        
+        console.log(selectedWordFromUser, "selectedWordFromUser", cellIndex, "cellIndex")
     }
+
+    useEffect(() => {
+        const checkWord = async () => {
+            const word = wordBuildFromArray(wordsGrid, selectedWordFromUser);
+            const result = await wordCheckOnExisting(word);
+            if (result) {
+                console.log("Correct word:", word);
+                onCorrectWord(word); 
+            } else {
+                setIsWordSelecting(false);
+                console.log("word not exist!")
+                let wordsGridRemovedLastInput = [...wordsGrid];
+                if(lastInput) wordsGridRemovedLastInput[lastInput] = ''; // ?? if writed only because of lastInput type null capability 
+                setWordsGrid(wordsGridRemovedLastInput)
+            }
+        };
+
+        if (!isWordSelecting && selectedWordFromUser.length && lastInput && selectedWordFromUser.includes(lastInput)) {
+            checkWord();
+            setIsWordSelecting(false);
+            setSelectedWordFromUser([]);
+        }
+        if(lastInput && !selectedWordFromUser.includes(lastInput) && !isWordSelecting){
+            //make alert that new letter wasnt used
+            console.log('New letter was not used!');
+            setIsWordSelecting(false);
+            setSelectedWordFromUser([]);
+        }
+    }, [isWordSelecting]);
+
 
     return <div>
         <div 
@@ -84,6 +137,6 @@ export default function Playboard({
                 />
             ))}
         </div>
-        <p>{selectedWordFromUser}</p>
+        <p>Selected word {wordBuildFromArray(wordsGrid, selectedWordFromUser)}</p>
     </div>
 }

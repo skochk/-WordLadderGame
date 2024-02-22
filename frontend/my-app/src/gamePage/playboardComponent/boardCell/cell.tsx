@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
-import '../../App.css';
+import '../../../App.css';
 
-export default function({
+export default function Cell({
     letter,
     isSelected,
     onMouseDown,
