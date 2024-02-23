@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import './App.css';
-import Playboard from "./gamePage/playboardComponent/playboard";
+import Playboard from "./gamePage/playboardComponent/playboardWithClasses";
 import Score from "./gamePage/scoreComponent/score";
 
 

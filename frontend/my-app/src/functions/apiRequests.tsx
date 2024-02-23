@@ -9,11 +9,10 @@ type wordCheckResponse = {
 
 const wordCheckOnExisting = async(word: string)=>{
     try{
-        let response  = await axios.post(`http://localhost:3001/api/wordCheck`,
+        let response  = await axios.post<wordCheckResponse>(`http://localhost:3001/api/wordCheck`,
             {
-                word: word
+                word
             });
-            // console.log(response.data);
         return response.data.result;
     }catch(err){
         console.log('axios err', err);

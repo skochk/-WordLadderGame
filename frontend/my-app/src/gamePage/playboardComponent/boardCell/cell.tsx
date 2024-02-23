@@ -5,7 +5,7 @@ export default function Cell({
     letter,
     isSelected,
     onMouseDown,
-    index,
+    // index,
     isWaitingInput,
     onMouseEnter
 
@@ -13,7 +13,7 @@ export default function Cell({
     letter: string,
     isSelected?: boolean,
     onMouseDown: () => void,
-    index: number,
+    // index: number,
     isWaitingInput?: boolean,
     onMouseEnter: () => void
     // onInput: (input:string) => void
@@ -22,7 +22,7 @@ export default function Cell({
         <div
             className={`cell ${isSelected ? "selected" : ""} ${isWaitingInput ? "waiting-input" : ""}`}
             onMouseDown={onMouseDown}
-            data-key-attribute={index}
+            // data-key-attribute={index}
             onMouseEnter={onMouseEnter}
         >
             {letter.toUpperCase()}

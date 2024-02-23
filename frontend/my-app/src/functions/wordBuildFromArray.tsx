@@ -1,8 +1,10 @@
 
 
-const wordBuildFromArray = (gridArray: string[], wordArray: number[])=>{
-    let word = "";
-    wordArray.map(element => word+=gridArray[element]);
+const wordBuildFromArray = (gridArray: string[][], wordArray: number[][])=>{
+    let word = '';
+    wordArray.forEach(([x, y]) => {
+        word += gridArray[x][y];
+    });
     return word;
 }
 

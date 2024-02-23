@@ -45,7 +45,7 @@
 }
 
 .playground{
-  width: 510px;
+  /* width: 510px; */
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;

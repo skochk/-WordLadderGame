@@ -14,20 +14,11 @@ export default function Playboard({
     gridSize: number,
     onCorrectWord: (word: string) => void;
 }){
-
+    
     const [wordsGrid, setWordsGrid] = useState<string[]>(
         Array.from({length:gridSize*gridSize}).map((el)=> "")
     )
-    wordsGrid[0] = "A"
-    wordsGrid[1] = "B"
-    wordsGrid[2] = "C"
-    wordsGrid[3] = "D"
-    wordsGrid[4] = "E"
-    wordsGrid[5] = "F"
-    wordsGrid[6] = "G"
-    wordsGrid[7] = "E"
-    wordsGrid[8] = "F"
-    wordsGrid[9] = "G"
+  
 
     const [waitingInputCellFromUser, setWaitingInputCellFromUser] = useState<number | null>(null);
     const [lastInput, setLastInput] = useState<number | null>(null); // need this in case if user want to change entered letter or change cell
@@ -89,18 +80,18 @@ export default function Playboard({
 
     useEffect(() => {
         const checkWord = async () => {
-            const word = wordBuildFromArray(wordsGrid, selectedWordFromUser);
-            const result = await wordCheckOnExisting(word);
-            if (result) {
-                console.log("Correct word:", word);
-                onCorrectWord(word); 
-            } else {
-                setIsWordSelecting(false);
-                console.log("word not exist!")
-                let wordsGridRemovedLastInput = [...wordsGrid];
-                if(lastInput) wordsGridRemovedLastInput[lastInput] = ''; // ?? if writed only because of lastInput type null capability 
-                setWordsGrid(wordsGridRemovedLastInput)
-            }
+            // const word = wordBuildFromArray(wordsGrid, selectedWordFromUser);
+            // const result = await wordCheckOnExisting(word);
+            // if (result) {
+            //     // console.log("Correct word:", word);
+            //     // onCorrectWord(word); 
+            // } else {
+            //     setIsWordSelecting(false);
+            //     console.log("word not exist!")
+            //     let wordsGridRemovedLastInput = [...wordsGrid];
+            //     if(lastInput) wordsGridRemovedLastInput[lastInput] = ''; // ?? if writed only because of lastInput type null capability 
+            //     setWordsGrid(wordsGridRemovedLastInput)
+            // }
         };
 
         if (!isWordSelecting && selectedWordFromUser.length && lastInput && selectedWordFromUser.includes(lastInput)) {
@@ -125,7 +116,7 @@ export default function Playboard({
             onKeyDown={handleKeyDown}
             tabIndex={0}
         >
-            {Array.from({length:gridSize*gridSize}).map((el, index)=>(
+            {/* {Array.from({length:gridSize*gridSize}).map((el, index)=>(
                 <Cell
                     letter={wordsGrid[index]} 
                     index={index}
@@ -135,8 +126,8 @@ export default function Playboard({
                     onMouseEnter={()=>mouseOnCellEnter(index)}
                     
                 />
-            ))}
+            ))} */}
         </div>
-        <p>Selected word {wordBuildFromArray(wordsGrid, selectedWordFromUser)}</p>
+        {/* <p>Selected word {wordBuildFromArray(wordsGrid, selectedWordFromUser)}</p> */}
     </div>
 }
