@@ -33,7 +33,8 @@ export default function Playboard({
         (async()=>{   
             if(!isWordSelecting && selectedWordFromUser.length && wordsGrid){
                 let res = await pboard.wordValidation();
-                // console.log('res msg',res)
+                // console.log('res msg',res);
+                if(res.status) onCorrectWord(res.word);
                 setNotificaton(res.message);
             }
         })()
@@ -42,7 +43,7 @@ export default function Playboard({
 
 
     pboard.onUpdate(() => {
-        console.log('onUpdate',pboard.getGameGrid(), 'last input',pboard.getLastInput(), "pboard.getSelectedWord()", pboard.getSelectedWord());
+        // console.log('onUpdate',pboard.getGameGrid(), 'last input',pboard.getLastInput(), "pboard.getSelectedWord()", pboard.getSelectedWord());
         let updState = [...pboard.getGameGrid()];
         setWordsGrid(updState);
         setLastInput(pboard.getLastInput());
@@ -57,7 +58,7 @@ export default function Playboard({
     };
 
     const onMouseDownHandler = (x: number, y :number)=>{
-        console.log( "onMouseDownHandler",x,y, lastInput)
+        // console.log( "onMouseDownHandler",x,y, lastInput)
         if(wordsGrid && wordsGrid[x][y] == "" || (lastInput && lastInput.x == x && lastInput.y == y)){
             setWaitingInputCellFromUser({x,y});
         }
@@ -93,7 +94,6 @@ export default function Playboard({
                         onMouseDown={() => onMouseDownHandler(xIndex, yIndex)}
                         onMouseEnter={()=>mouseOnCellEnter(xIndex,yIndex)}
                         letter={row[yIndex]}
-                        
                     />
                 ))}
             </div>

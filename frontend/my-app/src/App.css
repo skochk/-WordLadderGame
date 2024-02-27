@@ -82,3 +82,9 @@
   overflow: 'hidden';
   opacity: 0;
 }
+
+.wordList, .scores{
+  display: flex;
+  width: 500px;
+  justify-content: space-around;
+}

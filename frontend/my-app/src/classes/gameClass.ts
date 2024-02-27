@@ -55,7 +55,7 @@ class PlayboardClass{
     public addLetterToSelection(currentIndex: {x:number, y:number}){
         if(!this.selectedWord.length && this.gameGrid[currentIndex.x][currentIndex.y] !== ""){
             this.selectedWord = [[currentIndex.x,currentIndex.y]];
-            console.log("set first selected letter", this.selectedWord);
+            // console.log("set first selected letter", this.selectedWord);
             this.callUpdateCallback();
             return;
         }
@@ -85,6 +85,7 @@ class PlayboardClass{
     public async wordValidation(){
         // if(this.lastInput !== null){ //ask Nikita about this types number | null, maybe i use typescript wrong)) now i used ! in lastInput
         let wordInStringFormat = wordBuildFromArray(this.gameGrid,this.selectedWord);
+        console.log('word validationm wordslist', this.wordList);
         let isWordNotUsed = !this.wordList.includes(wordInStringFormat.toUpperCase());
         let isNewLetterUsed = this.selectedWord.some(el=> el[0] == this.lastInput!.x && el[1]== this.lastInput!.y)
         this.selectedWord = [];
@@ -92,18 +93,19 @@ class PlayboardClass{
 
         if (!isWordNotUsed || !isNewLetterUsed) {
             let message = !isWordNotUsed ? "This word already used" : "Entered letter was not used";
-            return { status: false, message };
+            return { status: false, message , word: wordInStringFormat };
         }
     
         let isExistOnDictionary = await wordCheckOnExisting(wordInStringFormat);
         
         if(isWordNotUsed && isNewLetterUsed && isExistOnDictionary){
             this.lastInput = null;
+            this.wordList.push(wordInStringFormat);
             this.callUpdateCallback();
         }
 
-        let message = isExistOnDictionary ? `Word ${isExistOnDictionary} is correct!` : "Word does not exist in the dictionary";
-        return { status: isExistOnDictionary, message }; 
+        let message = isExistOnDictionary ? `Word ${wordInStringFormat} is correct!` : "Word does not exist in the dictionary";
+        return { status: isExistOnDictionary, message, word : wordInStringFormat }; 
     }
     
     public addWordToWordList(word:string){
@@ -116,7 +118,7 @@ class PlayboardClass{
     }
 
     public addLetterToGameGrid(letter: string, position:{x: number, y:number}){
-        console.log('addLetterToGameGrid', letter, position, "this.lastInput", this.lastInput);
+        // console.log('addLetterToGameGrid', letter, position, "this.lastInput", this.lastInput);
         if(this.gameGrid[position.x][position.y] == "" || (this.lastInput && position.x == this.lastInput.x && position.y == this.lastInput.y)){
             if(this.lastInput){
                 this.gameGrid[this.lastInput.x][this.lastInput.y] = '';

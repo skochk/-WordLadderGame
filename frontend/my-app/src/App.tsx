@@ -11,13 +11,12 @@ interface FirstWordData {
 
 function App() {
   const [initialWord, setInitalWord] = useState<string>("");
-  const [newWordFromPlayer, setNewWordFromPlayer] = useState<string | null>(null);
-  
-  
+  const [newWordFromPlayer, setNewWordFromPlayer] = useState<string>("");
+  const [isFirstPlayerTurn, setTurn] = useState<boolean>(false) // need to be false in first switch
   useEffect(()=>{
     const firstWordFetch = async ()=>{
       try{
-        const response = await fetch("http://localhost:3001/api/getFirstWord");
+        const response = await fetch("http://localhost:3001/api/dictionary/getFirstWord/5");
         if (!response.ok) {
           throw new Error("Failed to fetch data");
         }
@@ -33,8 +32,9 @@ function App() {
   },[]);
 
   const handleNewWord = (word:string)=>{
-    console.log("handleNewWord", word);
     setNewWordFromPlayer(word);
+    setTurn(!isFirstPlayerTurn);
+    console.log("handleNewWord", word, "current turn: ", isFirstPlayerTurn);
   }
 
   return (  
@@ -45,7 +45,8 @@ function App() {
         onCorrectWord={handleNewWord}
       />
       <Score
-        
+        word={newWordFromPlayer}
+        isFirstPlayer={isFirstPlayerTurn}
       />
 
     </div>
