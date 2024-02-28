@@ -22,7 +22,7 @@ export default function Score({
                 scoreUpdate[isFirstPlayer ? 0 : 1] += word.length;
                 return scoreUpdate;
             });
-            console.log('render', words)
+            // console.log('render', words)
         }
     }, [word, isFirstPlayer]);
 

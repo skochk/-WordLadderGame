@@ -3,16 +3,18 @@ import { wordBuildFromArray } from '../functions/wordBuildFromArray';
 
 class PlayboardClass{
     private gameGrid: string[][];
-    public wordList: string[];
+    public wordList: string[][];
     public selectedWord: number[][];
     private lastInput: {x:number, y:number} | null;
+    private playerTurn: number; // 0 = first, 1 = second player turn
     private updateCallback: (() => void) | null = null;
 
     public constructor(){
         this.gameGrid = [[]];
-        this.wordList = [];
+        this.wordList = [[],[],[]]; // 0,1 = for players, 2 = initial word
         this.selectedWord = [];
         this.lastInput = null;
+        this.playerTurn = 0;
         console.log("constructor this.gameGrid", JSON.stringify(this.gameGrid));
     }
     
@@ -26,7 +28,7 @@ class PlayboardClass{
         // this.gameGrid[0][0] = "A";
         // this.gameGrid[0][0] = "A";
         this.gameGrid[(gridSize-1)/2] = initialWord.toUpperCase().split("");
-        this.wordList = [initialWord];
+        this.wordList[2] = [initialWord];
         this.callUpdateCallback();
     }
 
@@ -86,7 +88,7 @@ class PlayboardClass{
         // if(this.lastInput !== null){ //ask Nikita about this types number | null, maybe i use typescript wrong)) now i used ! in lastInput
         let wordInStringFormat = wordBuildFromArray(this.gameGrid,this.selectedWord);
         console.log('word validationm wordslist', this.wordList);
-        let isWordNotUsed = !this.wordList.includes(wordInStringFormat.toUpperCase());
+        let isWordNotUsed = !this.wordList.some(array => array.includes(wordInStringFormat.toUpperCase()));
         let isNewLetterUsed = this.selectedWord.some(el=> el[0] == this.lastInput!.x && el[1]== this.lastInput!.y)
         this.selectedWord = [];
         this.callUpdateCallback();
@@ -100,7 +102,9 @@ class PlayboardClass{
         
         if(isWordNotUsed && isNewLetterUsed && isExistOnDictionary){
             this.lastInput = null;
-            this.wordList.push(wordInStringFormat);
+            this.wordList[this.playerTurn].push(wordInStringFormat);
+            this.playerTurn = 1 - this.playerTurn;
+            console.log('w list', this.wordList);
             this.callUpdateCallback();
         }
 
@@ -108,14 +112,6 @@ class PlayboardClass{
         return { status: isExistOnDictionary, message, word : wordInStringFormat }; 
     }
     
-    public addWordToWordList(word:string){
-        this.wordList.push(word);
-        this.selectedWord = [];
-        this.callUpdateCallback();
-        this.lastInput = null;
-        console.log("addWordToWordList",this.selectedWord)
-
-    }
 
     public addLetterToGameGrid(letter: string, position:{x: number, y:number}){
         // console.log('addLetterToGameGrid', letter, position, "this.lastInput", this.lastInput);
@@ -128,6 +124,18 @@ class PlayboardClass{
             this.lastInput = {x: position.x, y: position.y};
         }
         this.callUpdateCallback();
+    }
+
+    public setTimeLeftForRound(){
+        return ""
+    }
+
+    public get currentGameState(){
+        return 'fullGameInfo';
+    }
+
+    public setGameState(){
+
     }
 
 }
