@@ -29,6 +29,7 @@ class PlayboardClass{
         // this.gameGrid[0][0] = "A";
         this.gameGrid[(gridSize-1)/2] = initialWord.toUpperCase().split("");
         this.wordList[2] = [initialWord];
+        console.log('class generateGrid', initialWord, this.gameGrid)
         this.callUpdateCallback();
     }
 

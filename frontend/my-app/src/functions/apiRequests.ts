@@ -7,6 +7,17 @@ type wordCheckResponse = {
     result: boolean
 }
 
+
+const getInitialWord = async()=>{
+    try{
+        let response = await axios.get(`${url}/api/dictionary/getFirstWord/5`);
+        return response.data.word;
+    }catch(err){
+        console.log('axios err', err);
+        throw err;
+    }
+}
+
 const wordCheckOnExisting = async(word: string)=>{
     try{
         let response  = await axios.post<wordCheckResponse>(`http://localhost:3001/api/dictionary/checkWord`,
@@ -21,5 +32,6 @@ const wordCheckOnExisting = async(word: string)=>{
 }
 
 export {
+    getInitialWord,
     wordCheckOnExisting
 };
