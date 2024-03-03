@@ -29,7 +29,7 @@ class PlayboardClass{
         // this.gameGrid[0][0] = "A";
         this.gameGrid[(gridSize-1)/2] = initialWord.toUpperCase().split("");
         this.wordList[2] = [initialWord];
-        console.log('class generateGrid', initialWord, this.gameGrid)
+        // console.log('class generateGrid', initialWord, this.gameGrid)
         this.callUpdateCallback();
     }
 
@@ -44,7 +44,7 @@ class PlayboardClass{
     }
 
     public getGameGrid(): string[][]{
-        return this.gameGrid;
+        return [...this.gameGrid];
     }
 
     public getLastInput(): {x:number, y:number} | null{
@@ -52,7 +52,11 @@ class PlayboardClass{
     }
 
     public getSelectedWord(): number[][]{
-        return this.selectedWord;
+        return [...this.selectedWord];
+    }
+    
+    public getWordList(): string[][]{
+        return [...this.wordList]; // prevent mutability?
     }
     
     public addLetterToSelection(currentIndex: {x:number, y:number}){
