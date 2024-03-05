@@ -1,0 +1,224 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+
+
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.playground{
+  /* width: 510px; */
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.playground:focus {
+  outline: none;
+}
+
+.cell{
+  height: 100px;
+  width: 100px;
+  border: 1px solid rgb(89, 89, 89);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+}
+.selected{
+
+  border: 1px solid rgb(255, 0, 0);
+
+}
+
+.waiting-input{
+  background-color: #1c1f25;
+}
+
+.invisible-input{
+  position: 'absolute';
+  width: 0;
+  height: 0;
+  overflow: 'hidden';
+  opacity: 0;
+}
+.scoreTable{
+  display: flex;
+  width: 500px;
+  flex-direction: row;
+  margin-left: 50px;
+}
+.playerScore{
+  display: flex;
+  width: 500px;
+  /* justify-content: space-around; */
+  flex-direction: column;
+}
+
+.header{
+  width: 100%;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #282c34;
+}
+.header a{
+  color: #61dafb;
+  text-decoration: none;
+  font-size: 33px;
+  margin: 0 20px 0 20px;
+}
+
+.basic{
+  height: calc(100vh - 200px);
+  background-color: #2e323a;
+  color: white;
+  padding-top: 100px;
+}
+
+.container{
+  width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.gameSetup .container{
+  display: flex;
+  flex-direction: column;
+}
+
+.gameSetup .container .selection{
+  /* background-color: red; */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.gameSetup .container .selection .mode{
+  border: 1px solid rgb(89, 89, 89);
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 10px;
+}
+.gameSetup .container .selection .mode a{
+  color: white;
+  text-decoration: none;
+}
+
+.gamePage{
+  display: flex;
+}
+
+.basic.gameSetup .settings{
+  display: flex;
+}
+
+.basic.gameSetup .settings .size{
+  margin: 0 10px 0 10px;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 10px;
+  margin-bottom: 50px;
+}
+.basic.gameSetup .settings .size-selected{
+  background-color: #0e1523;
+  margin: 0 10px 0 10px;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 10px;
+  margin-bottom: 50px;
+}
+
+.basic.gameSetup .settings.timer{
+  /* background-color: red; */
+  flex-direction: column;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 50px;
+}
+.basic.gameSetup .settings.timer .minutes{
+  min-width: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.basic.gameSetup .settings.timer .minutes p{
+  min-width: 25px;
+}
+
+.basic.gameSetup .settings.timer .slider {
+  -webkit-appearance: none;
+  width: 300px;
+  height: 15px; /* Adjust this value to increase the thickness */
+  background: #d3d3d3;
+  outline: none;
+  opacity: 1;
+  -webkit-transition: .2s;
+  transition: opacity .2s;
+  border-radius: 5px;
+}
+
+.basic.gameSetup .settings.timer .slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 30px;
+  height: 30px;
+  background: #0e1523;
+  cursor: pointer;
+  border-radius: 50%;
+  border: 1px solid #a4a7ab;
+}
+
+.basic.gameSetup .settings.timer .slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  background: 0e1523;
+  cursor: pointer;
+  border-radius: 50%;
+}
