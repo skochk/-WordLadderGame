@@ -4,17 +4,6 @@ import { getFirstWord } from "../controllers/dictionaryController";
 
 const router = express.Router();
 
-router.post("/createGame", (req,res)=>{
-    const { size, time, usePerTurnTimer } = req.body;
-    console.log(roomList)
-    // usePerTurnTimer ? time = time for each turn : time = time for whole game
-    let initialWord = getFirstWord(size);
-    let roomName = generateRoomName();
-    // send to roomList also generated gamegrid
-    roomList.set(roomName,{users: []});
-    res.send({code: roomName})
-})
-
 function generateRoomName(): string {
     const characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     let result = '';
@@ -29,5 +18,17 @@ function generateRoomName(): string {
     }
     return result;
 }
+
+router.post("/createGame", (req,res)=>{
+    console.log(roomList)
+    // usePerTurnTimer ? time = time for each turn : time = time for whole game
+
+    let roomName = generateRoomName();
+    // send to roomList also generated gamegrid
+
+    // send here inital word, then generate grid on 1st connect
+    roomList.set(roomName,{users: [], gameData: req.body});
+    res.send({code: roomName})
+})
 
 export default router;

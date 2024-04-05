@@ -1,5 +1,7 @@
+import { stat } from "fs";
 import { wordCheckOnExisting } from "../functions/apiRequests";
 import { wordBuildFromArray } from '../functions/wordBuildFromArray';
+
 
 class PlayboardClass{
     private gameGrid: string[][];
@@ -9,6 +11,7 @@ class PlayboardClass{
     private playerTurn: number; // 0 = first, 1 = second player turn
     private turnTime: number; // in seconds
     private isGameActive: boolean;
+    private usePerTurnTimer: boolean; 
     private updateCallback: (() => void) | null = null;
 
     public constructor(){
@@ -19,6 +22,7 @@ class PlayboardClass{
         this.playerTurn = 0;
         this.turnTime = 0;
         this.isGameActive = false;
+        this.usePerTurnTimer = true;
         console.log("constructor this.gameGrid", JSON.stringify(this.gameGrid));
     }
     
@@ -147,7 +151,8 @@ class PlayboardClass{
             wordList:this.wordList,
             playerTurn: this.playerTurn,
             turnTime: this.turnTime,
-            isGameActive: this.isGameActive
+            isGameActive: this.isGameActive,
+            usePerTurnTimer: this.usePerTurnTimer
         };
     }
 
@@ -156,6 +161,20 @@ class PlayboardClass{
         this.wordList = wordList;
         this.playerTurn = playerTurn;
         this.isGameActive = isGameActive;
+    }
+
+  
+
+    public generateGame(gridSize: number, initialWord: string, turnTime: number, usePerTurnTimer: boolean){
+        this.gameGrid = Array.from({ length: gridSize }, () => Array(gridSize).fill(""));
+        this.gameGrid[(gridSize-1)/2] = initialWord.toUpperCase().split("");
+        this.wordList[2] = [initialWord];
+        this.turnTime = turnTime;
+        this.usePerTurnTimer = usePerTurnTimer;
+        
+        this.callUpdateCallback();
+
+        return this.getCurrentGameState();   
     }
 
 }

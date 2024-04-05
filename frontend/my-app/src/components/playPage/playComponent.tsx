@@ -1,5 +1,6 @@
 import "../../App.css";
 import { useState } from "react";
+import { createGame } from "../../functions/apiRequests";
 
 
 interface GridSize {
@@ -26,6 +27,12 @@ function GameSetup(){
     const [selectedSize, setSelectedSize] = useState<number>(gridSize[1].size);
     const [usePerTurnTimer, setUsePerTurnTimer]=useState<boolean>(true);
     const [time, setTime]= useState<string>("120");
+
+    async function handleGameCreateClick(){
+        console.log("handle click: ")
+        let res = await createGame(selectedSize, Number(time), usePerTurnTimer)
+        
+    }
 
     return(
         <div className={["basic",'gameSetup'].join(" ")}>
@@ -60,18 +67,19 @@ function GameSetup(){
                 </div>
 
                 <div className="settings">
-                    <div
+                    <div 
                         className={usePerTurnTimer ? "size-selected" : "size"}
                         onClick={()=>setUsePerTurnTimer(true)}
                     >
-                        Overall Game Timer Mode
+                        Per Turn Timer Mode
                     </div>
 
-                    <div 
+                    <div
                         className={!usePerTurnTimer ? "size-selected" : "size"}
                         onClick={()=>setUsePerTurnTimer(false)}
                     >
-                        Per Turn Timer Mode</div>
+                        Overall Game Timer Mode
+                    </div>
                 </div>
 
                 <div className="selection">
@@ -80,7 +88,7 @@ function GameSetup(){
                             Play on this device together with friend
                         </a>
                     </div>
-                    <div className="mode">Play with friend by link</div>
+                    <div className="mode" onClick={()=> handleGameCreateClick()}>Play with friend by link</div>
                 </div>
 
             </div>

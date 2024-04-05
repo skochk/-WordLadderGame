@@ -23,8 +23,6 @@ function Game(){
 
     const socketRef = useRef<WebSocket | null>(null);
 
-
-
     useEffect(()=>{
         console.log("asd",gameID)
         if(gameID == "onThisDevice"){
@@ -40,7 +38,8 @@ function Game(){
             console.log("pboard after generate", pboard);
 
         }else{
-            socketRef.current = new WebSocket('ws://localhost:3000');
+            console.log('connecting to sockets, room: ',gameID)
+            socketRef.current = new WebSocket('ws://localhost:3001');
 
             socketRef.current.onopen = () => {
               console.log('WebSocket connection established');
@@ -80,7 +79,7 @@ function Game(){
     return(
         <div className='basic'>
             <div className="container">
-                {gameID === "onThisDevice" ? 
+                {/* {gameID === "onThisDevice" ?  */}
                 
                 <div className='gamePage'>
                     <Playboard
@@ -91,7 +90,7 @@ function Game(){
                 </div>
                 
                 
-                : <>write logic</>}
+                {/* : <>write logic</>} */}
             </div>
         </div>
     )
