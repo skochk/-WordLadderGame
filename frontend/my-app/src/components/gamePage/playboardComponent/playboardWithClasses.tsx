@@ -16,7 +16,7 @@ export default function Playboard({
     console.log('playboard useStateContext() state.gameGrid',state)
     const [cellWaitingInputFromUser, setWaitingInputCellFromUser] = useState<{x: number, y: number} | null>(null)
     const [isWordSelecting, setIsWordSelecting] = useState<boolean>(false);
-    const [notification, setNotificaton] = useState<string>("")
+    // const [notification, setNotificaton] = useState<string>("")
     
     
     useEffect(()=>{
@@ -24,7 +24,7 @@ export default function Playboard({
             if(!isWordSelecting && state.selectedWord.length && state.gameGrid){
                 let res = await playboardController.wordValidation();
                 // console.log('res msg',res);
-                setNotificaton(res.message);
+                // setNotificaton(res.message);
             }
         })()
 
@@ -70,7 +70,7 @@ export default function Playboard({
                     <Cell
                         isSelected={state.selectedWord.some(el=> el[0] == xIndex && el[1] == yIndex)}
                         isWaitingInput={cellWaitingInputFromUser ? cellWaitingInputFromUser.x === xIndex && cellWaitingInputFromUser.y === yIndex : false}
-                        key={xIndex}
+                        key={`${xIndex}-${yIndex}`}
                         onMouseDown={() => onMouseDownHandler(xIndex, yIndex)}
                         onMouseEnter={()=>mouseOnCellEnter(xIndex,yIndex)}
                         letter={row[yIndex]}
@@ -80,6 +80,7 @@ export default function Playboard({
         ))}
         </div>
         <p>Selected word {state.gameGrid && wordBuildFromArray(state.gameGrid, state.selectedWord)}</p>
-        <p>{notification}</p>
+        {/* <p>{notification}</p> */}
+        <p className='notification'>{state.notification}</p>
     </div>
 }

@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import "./../../../../App.css";
+import { useStateContext } from '../../context/stateContext';
 
 export default function Cell({
     letter,
@@ -17,11 +18,12 @@ export default function Cell({
     // index: number,
     onMouseEnter: () => void
 }){
+    const {state,setState} = useStateContext();
     return(
         <div
             className={`cell ${isSelected ? "selected" : ""} ${isWaitingInput ? "waiting-input" : ""}`}
-            onMouseDown={onMouseDown}
-            onMouseEnter={onMouseEnter}
+            onMouseDown={state.isGameActive ? onMouseDown : undefined}
+            onMouseEnter={state.isGameActive ? onMouseEnter : undefined}
         >
             {letter.toUpperCase()}
         </div>

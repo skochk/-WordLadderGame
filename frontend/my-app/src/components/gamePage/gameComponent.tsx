@@ -14,7 +14,7 @@ let pboard = new PlayboardClass();
 
 function Game(){
     const [initalWord, setInitialWord] = useState<string>("");
-    const [timer, setTimer] = useState<number>(0); // should be only UI, not change turn, waiting for update from backend
+    const [isFirstGamePlayed, setIsFirstGamePlayed] = useState(false);
     let { gameID } = useParams();
     const { state, setState } = useStateContext();
     const { search } = useLocation();
@@ -23,18 +23,26 @@ function Game(){
 
     const socketRef = useRef<WebSocket | null>(null);
 
+    const getFirstWord = async(gridSize : number, turnTime: number, usePerTurnTimer: boolean)=>{
+        let word = await getInitialWord(gridSize);
+        console.log('init word', word)
+        await setInitialWord(word);
+        await pboard.generateGrid(gridSize,word,turnTime, usePerTurnTimer);
+    }
     useEffect(()=>{
         console.log("asd",gameID)
         if(gameID == "onThisDevice"){
             let gridSize = Number(queryParams.get("gridSize")) || 5;
             let turnTime = Number(queryParams.get("time"));
-            const getFirstWord = async()=>{
-                let word = await getInitialWord(gridSize);
-                console.log('init word', word)
-                await setInitialWord(word);
-                await pboard.generateGrid(gridSize,word,turnTime);
-            }
-            getFirstWord();
+            // Convert to boolean from string this param
+            let usePerTurnTimer: boolean; 
+            const usePerTurnTimerStr = queryParams.get("usePerTurnTimer"); 
+            // Convert to boolean
+            usePerTurnTimer = usePerTurnTimerStr === 'true'; // Converting
+
+            pboard.generateGrid(gridSize,' '.repeat(gridSize),turnTime, usePerTurnTimer);
+            
+
             console.log("pboard after generate", pboard);
 
         }else{
@@ -62,14 +70,30 @@ function Game(){
 
     },[]);
 
+    const handleStartGame = ()=> {
+        console.log("handleStartGame",)
+        if(!isFirstGamePlayed) setIsFirstGamePlayed(true);
+        let gridSize = Number(queryParams.get("gridSize")) || 5;
+        let turnTime = Number(queryParams.get("time"));
+        // Convert to boolean from string this param
+        let usePerTurnTimer: boolean; 
+        const usePerTurnTimerStr = queryParams.get("usePerTurnTimer"); 
+        // Convert to boolean
+        usePerTurnTimer = usePerTurnTimerStr === 'true'; // Converting
+    
+        getFirstWord(gridSize, turnTime, usePerTurnTimer);
+        
+        console.log("pboard after generate", pboard);
+        pboard.startGame();
+        
+    }
+
     pboard.onUpdate(() => {
+      
       setState(prevState => {
         return{
             ...prevState,
-            gameGrid: pboard.getGameGrid(),
-            wordsList: pboard.getWordList(),
-            selectedWord: pboard.getSelectedWord(),
-            lastInput: pboard.getLastInput()
+            ...pboard.getCurrentGameState()
         }
       });
     });
@@ -86,9 +110,14 @@ function Game(){
                         playboardController={pboard}
                     />
                     <Score/>
-
-                </div>
                 
+                </div>
+                <div
+                    className='startButton'
+                    onClick={()=>handleStartGame()}
+                >
+                    { isFirstGamePlayed ? "Restart" : "Start"}
+                </div>
                 
                 {/* : <>write logic</>} */}
             </div>

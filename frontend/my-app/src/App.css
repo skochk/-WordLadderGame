@@ -48,9 +48,17 @@
   /* width: 510px; */
   display: flex;
   flex-direction: row;
-  flex-wrap: wrap;
+  /* flex-wrap: wrap; */
 }
 
+.startButton{
+  border: 1px solid rgb(89, 89, 89);
+  border-radius: 10px;
+  padding: 10px 20px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  margin-top: 10px;
+}
 .playground:focus {
   outline: none;
 }
@@ -91,8 +99,19 @@
 .playerScore{
   display: flex;
   width: 500px;
+  padding: 10px;
   /* justify-content: space-around; */
   flex-direction: column;
+  position: relative;
+}
+
+.totalScore{
+  position: absolute;
+  bottom: 10px;
+}
+
+.notification{
+  height: 20px;
 }
 
 .header{
@@ -123,6 +142,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
 }
 
 .gameSetup .container{
@@ -223,3 +243,5 @@
   cursor: pointer;
   border-radius: 50%;
 }
+
+

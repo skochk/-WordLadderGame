@@ -6,6 +6,13 @@ interface State {
   wordsList: string[][],
   selectedWord: number[][],
   lastInput: {x:number, y:number} | null,
+  turnTime: number,
+  playerTurn: number, 
+  isGameActive: boolean,
+  turnTimeLeft: [number, number],
+  notification: string,
+  playersScore: [number, number],
+  winner: number
 }
 
 interface StateContextType {
@@ -23,7 +30,15 @@ const initialState: State = {
   wordsList: [[], [], []],
   selectedWord: [],
   lastInput: null,
+  turnTime: 0, 
+  playerTurn: 0, 
+  isGameActive: false,
+  turnTimeLeft: [0,0],
+  notification: "",
+  playersScore: [0,0],
+  winner: 3,
 };
+
 
 const StateContext = createContext<StateContextType | undefined>(undefined);
 
